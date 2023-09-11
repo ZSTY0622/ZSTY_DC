@@ -1,0 +1,83 @@
+@Metadata.layer: #CORE
+@Search: { searchable: true }
+@UI: {
+    headerInfo: { typeName: 'Client',
+                  typeNamePlural: 'Clients',
+                  title: { type: #STANDARD, label: 'Client', value: 'ClientId' } } }
+
+annotate view ZSTY_C_CLNT
+    with 
+{
+    @UI.facet: [
+      
+     { position : 10,
+       label    : 'Client',
+       id       : 'Client',   
+       type     : #COLLECTION },
+       
+          { parentId : 'Client',
+            position : 20,
+            label    : 'Client Info',
+            purpose  : #STANDARD,
+            type     : #IDENTIFICATION_REFERENCE },
+            
+          { parentId : 'Client',
+            position : 30,
+            label    : 'Admin Info',
+            purpose  : #STANDARD,
+            type     : #FIELDGROUP_REFERENCE,   
+            targetQualifier: 'AdminFields' },                    
+             
+      { id: 'Appointment',
+        purpose: #STANDARD,
+        type: #LINEITEM_REFERENCE,
+        label: 'Appointment',
+        position: 40,
+        targetElement: '_Appointment'} ]
+                
+  @UI.hidden: true
+  ClientUuid;               
+
+  @UI.selectionField: [{ position: 10 }]
+  ClientId;
+
+  @EndUserText.label: 'Phone №'
+  @UI: { lineItem:       [{ position: 30 }],
+         identification: [{ position: 30 }] }
+  ClientPhoneNumber;
+
+  @Search.defaultSearchElement: true
+  @Search.fuzzinessThreshold: 0.7 
+  @EndUserText.label: 'First Name'
+  @UI: { lineItem:       [{ position: 10 }],
+         identification: [{ position: 10 }] }
+  ClientFirstName;
+
+  @Search.defaultSearchElement: true
+  @Search.fuzzinessThreshold: 0.7 
+  @EndUserText.label: 'Last Name'
+  @UI: { lineItem:       [{ position: 20 }],
+         identification: [{ position: 20 }] }
+  ClientLastName;
+
+  @EndUserText.label : 'Created By'
+  @UI.fieldGroup     : [{ position: 10, qualifier: 'AdminFields' } ]  
+  LocalCreatedBy;
+   
+  @EndUserText.label : 'Created At'
+  @UI.fieldGroup     : [{ position: 20, qualifier: 'AdminFields' } ]   
+  LocalCreatedAt;
+  
+  @EndUserText.label : 'Changed By'
+  @UI.fieldGroup     : [{ position: 30, qualifier: 'AdminFields' } ]   
+  LocalLastChangedBy;
+   
+  @EndUserText.label : 'Changed At'
+  @UI.fieldGroup     : [{ position: 40, qualifier: 'AdminFields' } ]   
+  LocalLastChangedAt; 
+            
+  @EndUserText.label : 'Last Changed At'
+  @UI.fieldGroup     : [{ position: 50, qualifier: 'AdminFields' } ]    
+  LastChangedAt; 
+    
+}

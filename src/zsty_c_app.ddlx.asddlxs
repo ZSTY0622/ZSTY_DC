@@ -1,0 +1,112 @@
+@Metadata.layer: #CORE
+@Search: { searchable: true }
+@UI: {
+    headerInfo: { typeName: 'Appointment',
+                  typeNamePlural: 'Appointments',
+                  title: { type: #STANDARD, label: 'Appointment', value: 'AppointmentId' } } }
+annotate view ZSTY_C_APP
+    with 
+{ 
+  @UI.facet: [
+     { purpose        : #HEADER,
+       position       : 5,
+       targetQualifier: 'Status',
+       type           : #DATAPOINT_REFERENCE},
+       
+     { position : 10,
+       label    : 'Appointment',
+       id       : 'Appointment',   
+       type     : #COLLECTION },
+       
+          { parentId : 'Appointment',
+            position : 20,
+            label    : 'Appointment Info',
+            purpose  : #STANDARD,
+            type     : #IDENTIFICATION_REFERENCE },
+            
+          { parentId : 'Appointment',
+            position : 30,
+            label    : 'Admin Info',
+            purpose  : #STANDARD,
+            type     : #FIELDGROUP_REFERENCE,   
+            targetQualifier: 'AdminFields' } ]  
+  
+
+  @Search.defaultSearchElement: true
+  @EndUserText.label: 'Appointment ID'
+  @UI: { lineItem:       [{ position: 5 }],
+         identification: [{ position: 5 }] }
+  AppointmentId;
+  
+  @UI.hidden: true
+  AppointmentUuid;
+  
+  @UI.hidden: true
+  ClientUuid;
+  
+  @UI.hidden: true
+  ClientId;
+  
+   @EndUserText.label: 'Doctor №' 
+   @UI: { lineItem:       [{ position: 10 }],
+         identification:  [{ position: 10 }] }
+  @Consumption.valueHelpDefinition: [{ entity: { name    : 'ZSTY_I_DOCTOR', 
+                                                 element : 'DoctorId'}  }] 
+  DoctorId;  
+ 
+   @EndUserText.label: 'Service №'  
+   @UI: { lineItem:       [{ position: 20 }],
+         identification:  [{ position: 20 }] }
+  @Consumption.valueHelpDefinition: [{ entity: { name    : 'ZSTY_I_SERVICE', 
+                                                 element : 'ServiceId'}  }] 
+  ServiceId; 
+  
+  @EndUserText.label: 'Appoitment date'
+  @UI: { lineItem:       [{ position: 30 }],
+         identification: [{ position: 30 }] } 
+  AppointmppointmentDate;
+
+  @EndUserText.label: 'Beginning of appoitment'
+  @UI: { lineItem:       [{ position: 40 }],
+         identification: [{ position: 40 }] }
+  AppointmentBegTime;
+  
+  @EndUserText.label: 'Ending of appoitment'  
+  @UI: { lineItem:       [{ position: 50 }],
+         identification: [{ position: 50 }] }
+  AppointmentEndTime;  
+  
+  @EndUserText.label: 'Status' 
+  @UI: { lineItem:       [{ position: 60, criticality: 'Status' },
+                          { type: #FOR_ACTION, dataAction: 'completeAppointment', label: 'Complete Appointment' },
+                          { type: #FOR_ACTION, dataAction: 'cancelAppointment',   label: 'Cancel Appointment' }],
+         identification: [{ position: 60 }] }
+  @UI.dataPoint        : { qualifier: 'Status',
+                          title: 'Status',
+                          criticality: 'Status' } 
+  @Consumption.valueHelpDefinition: [{ entity: { name    : 'ZSTY_I_STATUS', 
+                                                 element : 'StatusId'}  }] 
+  @UI.selectionField: [{ position: 10 }]
+  Status;
+    
+  @EndUserText.label : 'Created By'
+  @UI.fieldGroup     : [{ position: 10, qualifier: 'AdminFields' } ]  
+  LocalCreatedBy;
+   
+  @EndUserText.label : 'Created At'
+  @UI.fieldGroup     : [{ position: 20, qualifier: 'AdminFields' } ]   
+  LocalCreatedAt;
+  
+  @EndUserText.label : 'Changed By'
+  @UI.fieldGroup     : [{ position: 30, qualifier: 'AdminFields' } ]   
+  LocalLastChangedBy;
+   
+  @EndUserText.label : 'Changed At'
+  @UI.fieldGroup     : [{ position: 40, qualifier: 'AdminFields' } ]   
+  LocalLastChangedAt; 
+            
+  @EndUserText.label : 'Last Changed At'
+  @UI.fieldGroup     : [{ position: 50, qualifier: 'AdminFields' } ]    
+  LastChangedAt; 
+   
+}

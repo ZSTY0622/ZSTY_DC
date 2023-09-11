@@ -1,0 +1,94 @@
+managed;
+with draft;
+
+define behavior for ZSTY_I_CLNT alias Client
+implementation in class zbp_sty_i_client unique
+persistent table ZSTY_D_CLIENT0
+draft table ZSTY_D_CLNT_DRF
+lock master
+total etag LastChangedAt
+etag master LocalLastChangedAt
+{
+  create;
+  update;
+  delete;
+  association _Appointment { create;  with draft;}
+
+  field ( numbering : managed, readonly ) ClientUuID;
+  field ( readonly ) LocalCreatedBy,
+                     LocalCreatedAt,
+                     LocalLastChangedBy,
+                     LocalLastChangedAt,
+                     LastChangedAt;
+  field ( mandatory) ClientId,
+                     ClientFirstName,
+                     ClientLastName;
+
+  determination createNewClient on save { create; }
+
+  validation checkPhoneNumber on save { field ClientPhoneNumber; create; update;}
+
+  mapping for ZSTY_D_CLIENT0
+
+  {
+    ClientUuid         =  client_uuid;
+    ClientId           =  client_id;
+    ClientPhoneNumber  =  client_phone_number;
+    ClientFirstName    =  client_first_name;
+    ClientLastName     =  client_last_name;
+    LocalCreatedBy     =  local_created_by;
+    LocalCreatedAt     =  local_created_at;
+    LocalLastChangedBy =  local_last_changed_by;
+    LocalLastChangedAt =  local_last_changed_at;
+    LastChangedAt      =  last_changed_at;
+    }
+}
+
+define behavior for ZSTY_I_APP alias Appointment
+implementation in class zbp_sty_i_appointment unique
+persistent table ZSTY_D_APP0
+draft table ZSTY_D_APP_DRF
+lock dependent by _Client
+etag master LocalLastChangedAt
+
+{
+  update;
+  delete;
+  association _Client { with draft; }
+
+  field ( numbering : managed, readonly ) AppointmentUuID;
+  field (  readonly ) ClientUuID,
+                      ClientId,
+                      AppointmentID,
+                      LocalCreatedBy,
+                      LocalCreatedAt,
+                      LocalLastChangedBy,
+                      LocalLastChangedAt,
+                      LastChangedAt;
+
+  determination createNewAppointment on save { create; }
+  action (features : instance) completeAppointment result [1] $self;
+  action (features : instance) cancelAppointment result [1] $self;
+  validation checkStatus on save { field Status; create;}
+  validation checkAppointmentEndTime on save { field AppointmentBegTime, AppointmentEndTime; create;}
+
+  mapping for ZSTY_D_APP0
+
+  {
+    AppointmentUuid          =  appointment_uuid;
+    ClientUuid               =  client_uuid;
+    AppointmentId            =  appointment_id;
+    AppointmppointmentDate   =  appointment_date;
+    AppointmentBegTime       =  appointment_beg_time;
+    AppointmentEndTime       =  appointment_end_time;
+    ClientId                 =  client_id;
+    DoctorId                 =  doctor_id;
+    ServiceId                =  service_id;
+    Status                   =  status ;
+    LocalCreatedBy           =  local_created_by;
+    LocalCreatedAt           =  local_created_at;
+    LocalLastChangedBy       =  local_last_changed_by;
+    LocalLastChangedAt       =  local_last_changed_at;
+    LastChangedAt            =  last_changed_at;
+  }
+}

@@ -1,0 +1,5 @@
+@EndUserText.label: 'Service definition for RAP project'
+define service ZSTY_UI_RAP {
+  expose ZSTY_C_CLNT;
+  expose ZSTY_C_APP;
+}
